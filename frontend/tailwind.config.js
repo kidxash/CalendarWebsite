@@ -8,14 +8,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'brand-mint': '#F1F7EE', 
-        'brand-ash': '#B0BEA9',  
-        'brand-accent': '#92AA83',
-        'brand-green': '#ABCE64',
-        'brand-tea': '#C4DD92',
-      },
-      fontFamily: {
-        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        charcoal: '#283D3B',
+        teal: '#197278',
+        beige: '#EDDDD4',
+        terra: '#C44536',
+        rust: '#772E25',
       },
     },
   },
