@@ -27,9 +27,10 @@ function App() {
       const response = await fetch(`${API_BASE_URL}/events`);
       if (!response.ok) throw new Error('Failed to fetch events');
       const data = await response.json();
-      setEvents(data);
+      setEvents(Array.isArray(data) ? data : data.events || []);
     } catch (error) {
       console.error('Error loading events:', error);
+      setEvents([]);
     } finally {
       setLoading(false);
     }
@@ -73,6 +74,9 @@ function App() {
       const submitButton = document.activeElement;
       if(submitButton) submitButton.disabled = true;
 
+      console.log('Submitting to:', `${API_BASE_URL}/events`);
+      console.log('Form data:', { title: formData.title, date: formData.date });
+
       let response;
       if (editingId) {
         response = await fetch(`${API_BASE_URL}/events/${editingId}`, {
@@ -86,10 +90,14 @@ function App() {
         });
       }
 
+      console.log('Response status:', response.status);
+
       if (response.ok) {
         await fetchEvents();
         handleCancelEdit();
       } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Server error:', errorData);
         alert('Failed to save event. Please try again.');
       }
     } catch (error) {
@@ -144,7 +152,7 @@ function App() {
 
     try {
       setAnalyzing(true);
-      const response = await fetch(`${API_BASE_URL}/events/analyze?date=${analysisDate}`);
+      const response = await fetch(`${API_BASE_URL}/events/analyze/date?date=${analysisDate}`);
       
       if (response.ok) {
         const data = await response.json();
